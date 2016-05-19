@@ -11,6 +11,11 @@ enum Cell {
     Zero
 }
 
+enum State {
+    CrossTurn,
+    ZeroTurn,
+    GameOver
+}
 fn print_cell(cell: &Cell, idx: usize) {
     match *cell {
         Cell::Empty => print!("[{}]", idx),
