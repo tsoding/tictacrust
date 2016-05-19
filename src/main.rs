@@ -11,6 +11,7 @@ enum Cell {
     Zero
 }
 
+#[derive(Copy, Clone)]
 enum State {
     CrossTurn,
     ZeroTurn,
