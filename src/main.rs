@@ -4,7 +4,7 @@
 // [7] [8] [9]
 // > 5
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 enum Cell {
     Empty,
     Cross,
@@ -51,16 +51,25 @@ fn main() {
                 print_board(&board);
                 println!("x> ");
                 let index = read_index();
-                board[index - 1] = Cell::Cross;
-                state = State::ZeroTurn;
+
+                if (board[index - 1] != Cell::Empty) {
+                    println!("The cell is not empty!");
+                } else {
+                    board[index - 1] = Cell::Cross;
+                    state = State::ZeroTurn;
+                }
             },
 
             State::ZeroTurn => {
                 print_board(&board);
                 println!("o> ");
                 let index = read_index();
-                board[index - 1] = Cell::Zero;
-                state = State::CrossTurn;
+                if (board[index - 1] != Cell::Empty) {
+                    println!("The cell is not empty!");
+                } else {
+                    board[index - 1] = Cell::Zero;
+                    state = State::CrossTurn;
+                }
             },
 
             State::GameOver => {
