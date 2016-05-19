@@ -18,10 +18,10 @@ enum State {
     GameOver
 }
 
-fn read_index() -> u32 {
+fn read_index() -> usize {
     let mut input = String::new();
     std::io::stdin().read_line(&mut input).unwrap();
-    input.parse().unwrap()
+    input.trim().parse().unwrap()
 }
 
 fn print_cell(cell: &Cell, idx: usize) {
@@ -42,7 +42,29 @@ fn print_board(board: &[Cell; 9]) {
 }
 
 fn main() {
-    let board: [Cell; 9] = [Cell::Empty; 9];
+    let mut board: [Cell; 9] = [Cell::Empty; 9];
+    let mut state = State::CrossTurn;
 
-    print_board(&board);
+    loop {
+        match state {
+            State::CrossTurn => {
+                print_board(&board);
+                println!("x> ");
+                let index = read_index();
+                board[index - 1] = Cell::Cross;
+                state = State::ZeroTurn;
+            },
+
+            State::ZeroTurn => {
+                print_board(&board);
+                println!("o> ");
+                let index = read_index();
+                board[index - 1] = Cell::Zero;
+                state = State::CrossTurn;
+            },
+
+            State::GameOver => {
+            }
+        }
+    }
 }
