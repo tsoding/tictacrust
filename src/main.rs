@@ -16,6 +16,13 @@ enum State {
     ZeroTurn,
     GameOver
 }
+
+fn read_index() -> u32 {
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).unwrap();
+    input.parse().unwrap()
+}
+
 fn print_cell(cell: &Cell, idx: usize) {
     match *cell {
         Cell::Empty => print!("[{}]", idx),
