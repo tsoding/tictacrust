@@ -20,8 +20,11 @@ fn print_cell(cell: &Cell, idx: usize) {
 }
 
 fn print_board(board: &[Cell; 9]) {
-    for (idx, cell) in board.iter().enumerate() {
-        print_cell(cell, idx);
+    for (i, row) in board.chunks(3).enumerate() {
+        for (j, cell) in row.iter().enumerate() {
+            print_cell(cell, i * 3 + j + 1)
+        }
+        println!("")
     }
 }
 
