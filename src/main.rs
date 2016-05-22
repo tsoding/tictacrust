@@ -43,6 +43,24 @@ fn print_board(board: &[Cell; 9]) {
     }
 }
 
+fn player_turn(board: &mut [Cell; 9],
+               prompt: &str,
+               cell: Cell,
+               current_state: State,
+               next_state: State) -> State {
+    print_board(board);
+    println!("{}> ", prompt);
+    let index = read_index();
+
+    if board[index - 1] != Cell::Empty {
+        println!("The cell is not empty!");
+        current_state
+    } else {
+        board[index - 1] = cell;
+        next_state
+    }
+}
+
 fn main() {
     let mut board = [Cell::Empty; 9];
     let mut state = State::CrossTurn;
@@ -52,28 +70,11 @@ fn main() {
     loop {
         match state {
             CrossTurn => {
-                print_board(&board);
-                println!("x> ");
-                let index = read_index();
-
-                if board[index - 1] != Cell::Empty {
-                    println!("The cell is not empty!");
-                } else {
-                    board[index - 1] = Cell::Cross;
-                    state = ZeroTurn;
-                }
+                state = player_turn(&mut board, "x", Cell::Cross, state, ZeroTurn)
             },
 
             ZeroTurn => {
-                print_board(&board);
-                println!("o> ");
-                let index = read_index();
-                if board[index - 1] != Cell::Empty {
-                    println!("The cell is not empty!");
-                } else {
-                    board[index - 1] = Cell::Zero;
-                    state = CrossTurn;
-                }
+                state = player_turn(&mut board, "o", Cell::Zero, state, CrossTurn)
             },
 
             GameOver => {
