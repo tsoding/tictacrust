@@ -46,8 +46,7 @@ fn read_index() -> usize {
 fn print_cell(cell: &Cell, idx: usize) {
     match *cell {
         Empty => print!("[{}]", idx),
-        Figure(Cross) => print!(" x "),
-        Figure(Zero) => print!(" o "),
+        Figure(player) => print!(" {} ", player)
     }
 }
 
