@@ -88,15 +88,7 @@ fn main() {
     let mut board = [Empty; 9];
     let mut state = PlayerTurn(Cross);
 
-    loop {
-        match state {
-            PlayerTurn(player) => {
-                state = player_turn(&mut board, player)
-            }
-
-            GameOver => {
-                unimplemented!()
-            }
-        }
+    while let PlayerTurn(player) = state {
+        state = player_turn(&mut board, player)
     }
 }
