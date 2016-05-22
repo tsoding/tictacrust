@@ -25,10 +25,12 @@ fn read_index() -> usize {
 }
 
 fn print_cell(cell: &Cell, idx: usize) {
+    use Cell::*;
+
     match *cell {
-        Cell::Empty => print!("[{}]", idx),
-        Cell::Cross => print!(" x "),
-        Cell::Zero => print!(" o "),
+        Empty => print!("[{}]", idx),
+        Cross => print!(" x "),
+        Zero => print!(" o "),
     }
 }
 
@@ -42,37 +44,40 @@ fn print_board(board: &[Cell; 9]) {
 }
 
 fn main() {
-    let mut board: [Cell; 9] = [Cell::Empty; 9];
+    let mut board = [Cell::Empty; 9];
     let mut state = State::CrossTurn;
+
+    use State::*;
 
     loop {
         match state {
-            State::CrossTurn => {
+            CrossTurn => {
                 print_board(&board);
                 println!("x> ");
                 let index = read_index();
 
-                if (board[index - 1] != Cell::Empty) {
+                if board[index - 1] != Cell::Empty {
                     println!("The cell is not empty!");
                 } else {
                     board[index - 1] = Cell::Cross;
-                    state = State::ZeroTurn;
+                    state = ZeroTurn;
                 }
             },
 
-            State::ZeroTurn => {
+            ZeroTurn => {
                 print_board(&board);
                 println!("o> ");
                 let index = read_index();
-                if (board[index - 1] != Cell::Empty) {
+                if board[index - 1] != Cell::Empty {
                     println!("The cell is not empty!");
                 } else {
                     board[index - 1] = Cell::Zero;
-                    state = State::CrossTurn;
+                    state = CrossTurn;
                 }
             },
 
-            State::GameOver => {
+            GameOver => {
+                unimplemented!()
             }
         }
     }
