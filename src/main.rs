@@ -28,8 +28,7 @@ enum Cell {
 
 #[derive(Copy, Clone)]
 enum State {
-    CrossTurn,
-    ZeroTurn,
+    PlayerTurn(Player),
     GameOver
 }
 
@@ -59,41 +58,41 @@ fn print_board(board: &[Cell; 9]) {
     }
 }
 
+fn opposite_player(player: Player) -> Player {
+    match player {
+        Cross => Zero,
+        Zero => Cross
+    }
+}
+
 fn player_turn(board: &mut [Cell; 9],
-               prompt: &str,
-               cell: Cell,
-               current_state: State,
-               next_state: State) -> State {
+               player: Player) -> State {
     print_board(board);
-    println!("{}> ", prompt);
+    println!("{}> ", player);
     let index = read_index();
 
     match board[index - 1] {
         Cell::Empty => {
-            board[index - 1] = cell;
-            next_state
+            board[index - 1] = Figure(player);
+            PlayerTurn(opposite_player(player))
         },
 
         _ => {
             println!("The cell is not empty!");
-            current_state
+            PlayerTurn(player)
         }
     }
 }
 
 fn main() {
-    let mut board = [Cell::Empty; 9];
-    let mut state = State::CrossTurn;
+    let mut board = [Empty; 9];
+    let mut state = PlayerTurn(Cross);
 
     loop {
         match state {
-            CrossTurn => {
-                state = player_turn(&mut board, "x", Figure(Cross), state, ZeroTurn)
-            },
-
-            ZeroTurn => {
-                state = player_turn(&mut board, "o", Figure(Zero), state, CrossTurn)
-            },
+            PlayerTurn(player) => {
+                state = player_turn(&mut board, player)
+            }
 
             GameOver => {
                 unimplemented!()
