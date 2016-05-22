@@ -1,14 +1,18 @@
-
 // [1] [2] [3]
 // [4]  x  [6]
 // [7] [8] [9]
 // > 5
 
-#[derive(Copy, Clone, PartialEq)]
-enum Cell {
-    Empty,
+#[derive(Copy, Clone)]
+enum Player {
     Cross,
     Zero
+}
+
+#[derive(Copy, Clone)]
+enum Cell {
+    Empty,
+    Figure(Player)
 }
 
 #[derive(Copy, Clone)]
@@ -18,6 +22,10 @@ enum State {
     GameOver
 }
 
+use Player::*;
+use Cell::*;
+use State::*;
+
 fn read_index() -> usize {
     let mut input = String::new();
     std::io::stdin().read_line(&mut input).unwrap();
@@ -25,12 +33,10 @@ fn read_index() -> usize {
 }
 
 fn print_cell(cell: &Cell, idx: usize) {
-    use Cell::*;
-
     match *cell {
         Empty => print!("[{}]", idx),
-        Cross => print!(" x "),
-        Zero => print!(" o "),
+        Figure(Cross) => print!(" x "),
+        Figure(Zero) => print!(" o "),
     }
 }
 
@@ -52,12 +58,16 @@ fn player_turn(board: &mut [Cell; 9],
     println!("{}> ", prompt);
     let index = read_index();
 
-    if board[index - 1] != Cell::Empty {
-        println!("The cell is not empty!");
-        current_state
-    } else {
-        board[index - 1] = cell;
-        next_state
+    match board[index - 1] {
+        Cell::Empty => {
+            println!("The cell is not empty!");
+            current_state
+        },
+
+        _ => {
+            board[index - 1] = cell;
+            next_state
+        }
     }
 }
 
@@ -65,16 +75,14 @@ fn main() {
     let mut board = [Cell::Empty; 9];
     let mut state = State::CrossTurn;
 
-    use State::*;
-
     loop {
         match state {
             CrossTurn => {
-                state = player_turn(&mut board, "x", Cell::Cross, state, ZeroTurn)
+                state = player_turn(&mut board, "x", Figure(Cross), state, ZeroTurn)
             },
 
             ZeroTurn => {
-                state = player_turn(&mut board, "o", Cell::Zero, state, CrossTurn)
+                state = player_turn(&mut board, "o", Figure(Zero), state, CrossTurn)
             },
 
             GameOver => {
