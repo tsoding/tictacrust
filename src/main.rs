@@ -3,10 +3,21 @@
 // [7] [8] [9]
 // > 5
 
+use std::fmt;
+
 #[derive(Copy, Clone)]
 enum Player {
     Cross,
     Zero
+}
+
+impl fmt::Display for Player {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Cross => write!(f, "x"),
+            Zero => write!(f, "o")
+        }
+    }
 }
 
 #[derive(Copy, Clone)]
