@@ -4,6 +4,7 @@
 // > 5
 
 use std::fmt;
+use std::error::Error;
 
 #[derive(Copy, Clone)]
 enum Player {
@@ -21,6 +22,12 @@ impl fmt::Display for Player {
 }
 
 #[derive(Copy, Clone)]
+enum Command {
+    Quit,
+    Put(usize)
+}
+
+#[derive(Copy, Clone)]
 enum Cell {
     Empty,
     Figure(Player)
@@ -35,11 +42,14 @@ enum State {
 use Player::*;
 use Cell::*;
 use State::*;
+use Command::*;
 
-fn read_index() -> usize {
+fn read_command() -> Result<Command, String> {
     let mut input = String::new();
-    std::io::stdin().read_line(&mut input).unwrap();
-    input.trim().parse().unwrap()
+    match std::io::stdin().read_line(&mut input) {
+        Ok(_) => Ok(Put(input.trim().parse().unwrap())),
+        Err(err) => Err(err.description().to_owned())
+    }
 }
 
 fn print_cell(cell: &Cell, idx: usize) {
@@ -69,18 +79,17 @@ fn player_turn(board: &mut [Cell; 9],
                player: Player) -> State {
     print_board(board);
     println!("{}> ", player);
-    let index = read_index();
 
-    match board[index - 1] {
-        Cell::Empty => {
+    match read_command() {
+        Ok(Put(index)) => if let Empty = board[index - 1] {
             board[index - 1] = Figure(player);
             PlayerTurn(opposite_player(player))
-        },
-
-        _ => {
+        } else {
             println!("The cell is not empty!");
             PlayerTurn(player)
-        }
+        },
+
+        _ => GameOver
     }
 }
 
