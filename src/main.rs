@@ -71,13 +71,13 @@ fn player_turn(board: &mut [Cell; 9],
 
     match board[index - 1] {
         Cell::Empty => {
-            println!("The cell is not empty!");
-            current_state
+            board[index - 1] = cell;
+            next_state
         },
 
         _ => {
-            board[index - 1] = cell;
-            next_state
+            println!("The cell is not empty!");
+            current_state
         }
     }
 }
