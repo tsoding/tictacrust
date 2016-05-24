@@ -47,7 +47,14 @@ use Command::*;
 fn read_command() -> Result<Command, String> {
     let mut input = String::new();
     match std::io::stdin().read_line(&mut input) {
-        Ok(_) => Ok(Put(input.trim().parse().unwrap())),
+        Ok(_) => {
+            let trimmed_input: &str = input.trim();
+            if trimmed_input == "q" {
+                Ok(Quit)
+            } else {
+                Ok(Put(input.trim().parse().unwrap()))
+            }
+        },
         Err(err) => Err(err.description().to_owned())
     }
 }

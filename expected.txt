@@ -2,6 +2,16 @@
 [4][5][6]
 [7][8][9]
 x> 
+Incorrect index. Please try again
+[1][2][3]
+[4][5][6]
+[7][8][9]
+x> 
+Incorrect index. Please try again
+[1][2][3]
+[4][5][6]
+[7][8][9]
+x> 
  x [2][3]
 [4][5][6]
 [7][8][9]
