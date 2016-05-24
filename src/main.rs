@@ -81,11 +81,16 @@ fn player_turn(board: &mut [Cell; 9],
     println!("{}> ", player);
 
     match read_command() {
-        Ok(Put(index)) => if let Empty = board[index - 1] {
-            board[index - 1] = Figure(player);
-            PlayerTurn(opposite_player(player))
+        Ok(Put(index)) => if 1 <= index && index <= 9 {
+            if let Empty = board[index - 1] {
+                board[index - 1] = Figure(player);
+                PlayerTurn(opposite_player(player))
+            } else {
+                println!("The cell is not empty!");
+                PlayerTurn(player)
+            }
         } else {
-            println!("The cell is not empty!");
+            println!("Incorrect index. Please try again");
             PlayerTurn(player)
         },
 
