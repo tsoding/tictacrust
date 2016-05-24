@@ -36,20 +36,4 @@ o>
  o  x  o 
 [7][8][9]
 x> 
- x  o  x 
- o  x  o 
- x [8][9]
-o> 
- x  o  x 
- o  x  o 
- x  o [9]
-x> 
- x  o  x 
- o  x  o 
- x  o  x 
-o> 
-The cell is not empty!
- x  o  x 
- o  x  o 
- x  o  x 
-o> 
+x won
