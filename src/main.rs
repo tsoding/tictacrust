@@ -49,7 +49,7 @@ fn read_command() -> Result<Command, String> {
     match std::io::stdin().read_line(&mut input) {
         Ok(_) => {
             let trimmed_input: &str = input.trim();
-            if trimmed_input == "e" {
+            if trimmed_input == "q" {
                 Ok(Quit)
             } else {
                 Ok(Put(input.trim().parse().unwrap()))
