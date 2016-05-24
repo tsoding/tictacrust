@@ -36,7 +36,7 @@ enum Cell {
 #[derive(Copy, Clone)]
 enum State {
     PlayerTurn(Player),
-    GameOver
+    GameOver(Option<Player>)
 }
 
 use Player::*;
@@ -101,7 +101,7 @@ fn player_turn(board: &mut [Cell; 9],
             PlayerTurn(player)
         },
 
-        _ => GameOver
+        _ => GameOver(None)
     }
 }
 
