@@ -1,1 +1,6 @@
 language: rust
+script:
+  - cargo build --verbose
+  - cargo test --verbose
+  - ./target/debug/tictacrust < input.txt > output.txt
+  - test -z "$(diff output.txt expected.txt)"
