@@ -87,6 +87,8 @@ fn opposite_player(player: Player) -> Player {
 }
 
 fn player_won(board: &[Cell; 9], player: Player) -> bool {
+    let figure = Figure(player);
+    let mut diag_streak = true;
     for i in 0..3 {
         let mut row_streak = true;
         let mut col_streak = true;
@@ -95,9 +97,11 @@ fn player_won(board: &[Cell; 9], player: Player) -> bool {
             let row_index = board_index(i, j);
             let col_index = board_index(j, i);
 
-            row_streak = row_streak && (board[row_index] == Figure(player));
-            col_streak = col_streak && (board[col_index] == Figure(player))
+            row_streak = row_streak && (board[row_index] == figure);
+            col_streak = col_streak && (board[col_index] == figure)
         }
+
+        diag_streak = diag_streak && (board[board_index(i, i)] == figure);
 
         if row_streak {
             return true
@@ -106,6 +110,10 @@ fn player_won(board: &[Cell; 9], player: Player) -> bool {
         if col_streak {
             return true
         }
+    }
+
+    if diag_streak {
+        return true
     }
 
     false
