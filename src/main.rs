@@ -66,8 +66,8 @@ fn print_cell(cell: &Cell, idx: usize) {
     }}
 
 
-fn board_index(i: usize, j: usize) -> usize {
-    i * 3 + j
+fn board_index(row: usize, column: usize) -> usize {
+    row * 3 + column
 }
 
 fn print_board(board: &[Cell; 9]) {
@@ -89,6 +89,7 @@ fn opposite_player(player: Player) -> Player {
 fn player_won(board: &[Cell; 9], player: Player) -> bool {
     let figure = Figure(player);
     let mut diag_streak = true;
+    let mut sec_diag_streak = true;
     for i in 0..3 {
         let mut row_streak = true;
         let mut col_streak = true;
@@ -102,6 +103,7 @@ fn player_won(board: &[Cell; 9], player: Player) -> bool {
         }
 
         diag_streak = diag_streak && (board[board_index(i, i)] == figure);
+        sec_diag_streak = sec_diag_streak && (board[board_index(i, 2 - i)] == figure);
 
         if row_streak {
             return true
@@ -113,6 +115,10 @@ fn player_won(board: &[Cell; 9], player: Player) -> bool {
     }
 
     if diag_streak {
+        return true
+    }
+
+    if sec_diag_streak {
         return true
     }
 
