@@ -6,7 +6,7 @@
 use std::fmt;
 use std::error::Error;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 enum Player {
     Cross,
     Zero
@@ -27,7 +27,7 @@ enum Command {
     Put(usize)
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 enum Cell {
     Empty,
     Figure(Player)
@@ -63,13 +63,17 @@ fn print_cell(cell: &Cell, idx: usize) {
     match *cell {
         Empty => print!("[{}]", idx),
         Figure(player) => print!(" {} ", player)
-    }
+    }}
+
+
+fn board_index(i: usize, j: usize) -> usize {
+    i * 3 + j
 }
 
 fn print_board(board: &[Cell; 9]) {
     for (i, row) in board.chunks(3).enumerate() {
         for (j, cell) in row.iter().enumerate() {
-            print_cell(cell, i * 3 + j + 1)
+            print_cell(cell, board_index(i, j) + 1)
         }
         println!("")
     }
@@ -82,6 +86,31 @@ fn opposite_player(player: Player) -> Player {
     }
 }
 
+fn player_won(board: &[Cell; 9], player: Player) -> bool {
+    for i in 0..3 {
+        let mut row_streak = true;
+        let mut col_streak = true;
+
+        for j in 0..3 {
+            let row_index = board_index(i, j);
+            let col_index = board_index(j, i);
+
+            row_streak = row_streak && (board[row_index] == Figure(player));
+            col_streak = col_streak && (board[col_index] == Figure(player))
+        }
+
+        if row_streak {
+            return true
+        }
+
+        if col_streak {
+            return true
+        }
+    }
+
+    false
+}
+
 fn player_turn(board: &mut [Cell; 9],
                player: Player) -> State {
     print_board(board);
@@ -91,7 +120,12 @@ fn player_turn(board: &mut [Cell; 9],
         Ok(Put(index)) => if 1 <= index && index <= 9 {
             if let Empty = board[index - 1] {
                 board[index - 1] = Figure(player);
-                PlayerTurn(opposite_player(player))
+
+                if player_won(board, player) {
+                    GameOver(Some(player))
+                } else {
+                    PlayerTurn(opposite_player(player))
+                }
             } else {
                 println!("The cell is not empty!");
                 PlayerTurn(player)
@@ -111,5 +145,10 @@ fn main() {
 
     while let PlayerTurn(player) = state {
         state = player_turn(&mut board, player)
+    }
+
+    match state {
+        GameOver(Some(player)) => println!("{} won", player),
+        _ => ()
     }
 }
