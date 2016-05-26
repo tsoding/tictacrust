@@ -86,32 +86,35 @@ fn opposite_player(player: Player) -> Player {
     }
 }
 
-fn player_won(board: &[Cell; 9], player: Player) -> bool {
+fn check_table<F>(mut predicate: F) -> bool where F: FnMut(usize, usize) -> bool {
+    for i in 0..3 {
+        let mut streak = true;
+        for j in 0..3 {
+            streak &= predicate(i, j)
+        }
+        if streak {
+            return true
+        }
+    };
+    false
+}
+
+fn check_rows(board: &[Cell; 9], player: Player) -> bool {
+    check_table(|i, j| board[board_index(i, j)] == Figure(player))
+}
+
+fn check_cols(board: &[Cell; 9], player: Player) -> bool {
+    check_table(|i, j| board[board_index(j, i)] == Figure(player))
+}
+
+fn check_diags(board: &[Cell; 9], player: Player) -> bool {
     let figure = Figure(player);
     let mut diag_streak = true;
     let mut sec_diag_streak = true;
+
     for i in 0..3 {
-        let mut row_streak = true;
-        let mut col_streak = true;
-
-        for j in 0..3 {
-            let row_index = board_index(i, j);
-            let col_index = board_index(j, i);
-
-            row_streak &= board[row_index] == figure;
-            col_streak &= board[col_index] == figure
-        }
-
         diag_streak &= board[board_index(i, i)] == figure;
         sec_diag_streak &= board[board_index(i, 2 - i)] == figure;
-
-        if row_streak {
-            return true
-        }
-
-        if col_streak {
-            return true
-        }
     }
 
     if diag_streak {
@@ -123,6 +126,12 @@ fn player_won(board: &[Cell; 9], player: Player) -> bool {
     }
 
     false
+}
+
+fn player_won(board: &[Cell; 9], player: Player) -> bool {
+    check_rows(board, player) ||
+    check_cols(board, player) ||
+    check_diags(board, player)
 }
 
 fn player_turn(board: &mut [Cell; 9],
