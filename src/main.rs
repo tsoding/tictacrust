@@ -98,12 +98,12 @@ fn player_won(board: &[Cell; 9], player: Player) -> bool {
             let row_index = board_index(i, j);
             let col_index = board_index(j, i);
 
-            row_streak = row_streak && (board[row_index] == figure);
-            col_streak = col_streak && (board[col_index] == figure)
+            row_streak &= board[row_index] == figure;
+            col_streak &= board[col_index] == figure
         }
 
-        diag_streak = diag_streak && (board[board_index(i, i)] == figure);
-        sec_diag_streak = sec_diag_streak && (board[board_index(i, 2 - i)] == figure);
+        diag_streak &= board[board_index(i, i)] == figure;
+        sec_diag_streak &= board[board_index(i, 2 - i)] == figure;
 
         if row_streak {
             return true
