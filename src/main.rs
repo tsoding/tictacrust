@@ -113,23 +113,7 @@ fn check_cols(board: &[Cell; 9], player: Player) -> bool {
 
 fn check_diags(board: &[Cell; 9], player: Player) -> bool {
     let figure = Figure(player);
-    let mut diag_streak = true;
-    let mut sec_diag_streak = true;
-
-    for i in 0..3 {
-        diag_streak &= board[board_index(i, i)] == figure;
-        sec_diag_streak &= board[board_index(i, 2 - i)] == figure;
-    }
-
-    if diag_streak {
-        return true
-    }
-
-    if sec_diag_streak {
-        return true
-    }
-
-    false
+    check_row(|i| board[board_index(i, i)] == figure) || check_row(|i| board[board_index(i, 2 - i)] == figure)
 }
 
 fn player_won(board: &[Cell; 9], player: Player) -> bool {
