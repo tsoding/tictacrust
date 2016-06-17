@@ -86,16 +86,20 @@ fn opposite_player(player: Player) -> Player {
     }
 }
 
+fn check_row<F>(mut predicate: F) -> bool where F: FnMut(usize) -> bool {
+    let mut streak = true;
+    for j in 0..3 {
+        streak &= predicate(j);
+    }
+    streak
+}
+
 fn check_table<F>(mut predicate: F) -> bool where F: FnMut(usize, usize) -> bool {
     for i in 0..3 {
-        let mut streak = true;
-        for j in 0..3 {
-            streak &= predicate(i, j)
-        }
-        if streak {
+        if check_row(|j| predicate(i, j)) {
             return true
         }
-    };
+    }
     false
 }
 
