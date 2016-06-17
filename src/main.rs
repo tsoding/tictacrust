@@ -44,6 +44,8 @@ use Cell::*;
 use State::*;
 use Command::*;
 
+type Board = [Cell; 9];
+
 fn read_command() -> Result<Command, String> {
     let mut input = String::new();
     match std::io::stdin().read_line(&mut input) {
@@ -70,7 +72,7 @@ fn board_index(row: usize, column: usize) -> usize {
     row * 3 + column
 }
 
-fn print_board(board: &[Cell; 9]) {
+fn print_board(board: &Board) {
     for (i, row) in board.chunks(3).enumerate() {
         for (j, cell) in row.iter().enumerate() {
             print_cell(cell, board_index(i, j) + 1)
@@ -103,26 +105,26 @@ fn check_table<F>(mut predicate: F) -> bool where F: FnMut(usize, usize) -> bool
     false
 }
 
-fn check_rows(board: &[Cell; 9], player: Player) -> bool {
+fn check_rows(board: &Board, player: Player) -> bool {
     check_table(|i, j| board[board_index(i, j)] == Figure(player))
 }
 
-fn check_cols(board: &[Cell; 9], player: Player) -> bool {
+fn check_cols(board: &Board, player: Player) -> bool {
     check_table(|i, j| board[board_index(j, i)] == Figure(player))
 }
 
-fn check_diags(board: &[Cell; 9], player: Player) -> bool {
+fn check_diags(board: &Board, player: Player) -> bool {
     let figure = Figure(player);
     check_row(|i| board[board_index(i, i)] == figure) || check_row(|i| board[board_index(i, 2 - i)] == figure)
 }
 
-fn player_won(board: &[Cell; 9], player: Player) -> bool {
+fn player_won(board: &Board, player: Player) -> bool {
     check_rows(board, player) ||
     check_cols(board, player) ||
     check_diags(board, player)
 }
 
-fn player_turn(board: &mut [Cell; 9],
+fn player_turn(board: &mut Board,
                player: Player) -> State {
     print_board(board);
     println!("{}> ", player);
