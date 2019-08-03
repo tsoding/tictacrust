@@ -1,3 +1,4 @@
+[![Tsoding](https://img.shields.io/badge/twitch.tv-tsoding-purple?logo=twitch&style=for-the-badge)](https://www.twitch.tv/tsoding)
 [![Build Status](https://travis-ci.org/tsoding/tictacrust.svg?branch=master)](https://travis-ci.org/tsoding/tictacrust)
 [![Stories in Ready](https://badge.waffle.io/tsoding/tictacrust.svg?label=ready&title=Ready)](http://waffle.io/tsoding/tictacrust)
 
